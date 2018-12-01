@@ -1,3 +1,16 @@
+def apply_change_check_duplicate(frequency, change, frequency_dict):
+
+    is_repeat = False
+
+    if frequency in frequency_dict:
+        is_repeat = True
+    else:
+        frequency_dict[frequency] = 1
+
+    frequency += change
+
+    return frequency, is_repeat
+
 if __name__ == "__main__":
     frequency = 0
     frequency_dict = {}
@@ -5,14 +18,13 @@ if __name__ == "__main__":
 
     changes = []
     for line in open("input/Day1.txt").readlines():
-        if frequency in frequency_dict and not repeat_seen:
-            print(f'Frequency {frequency} was seen twice first')
-            repeat_seen = True
-        else:
-            frequency_dict[frequency] = 1
-
         change = int(line)
-        frequency += change
+        frequency, is_repeat = apply_change_check_duplicate(frequency, change, frequency_dict)
+
+        if is_repeat and not repeat_seen:
+            repeat_seen = True
+            print(f'Frequency {frequency} was seen twice')
+
         changes.append(change)
 
     print(frequency)
@@ -20,12 +32,10 @@ if __name__ == "__main__":
     # Part 2: Keep applying frequency changes from the input list until a frequency is seen twice
     i = 0
     while not repeat_seen:
-        if frequency in frequency_dict and not repeat_seen:
-            print(f'Frequency {frequency} was seen twice first')
-            repeat_seen = True
-        else:
-            frequency_dict[frequency] = 1
-
         change = changes[i]
-        frequency += change
+        frequency, is_repeat = apply_change_check_duplicate(frequency, change, frequency_dict)
         i = (i+1) % len(changes)
+
+        if is_repeat:
+            repeat_seen = True
+            print(f'Frequency {frequency} was seen twice')
