@@ -1,4 +1,6 @@
+import copy
 from heapq import heappush, heappop
+import queue
 import re
 
 class Node:
@@ -13,51 +15,77 @@ class Node:
     def __lt__(self, other):
         return(self.letter < other.letter)
 
+class Worker:
+    def __init__(self):
+        self.time_left = 0
+        self.work_item = Node('-')
 
-def priority_graph_traversal(graph_heads, graph_dict):
+def get_next_work_item(heap, remaining, finished):
+    # pop items til we get one that is available
+    is_available = False
+    while not is_available:
+        put_back = []
+        node = heappop(heap)
+
+        is_available = True
+        for letter, letter_node in remaining.items():
+            if node in letter_node.children and letter_node is not node:
+                is_available = False
+            
+        if not is_available:
+            put_back.append(node)
+        else:
+            del remaining[node.letter]
+            finished.append(node)
+            for item in put_back:
+                if item not in heap:
+                    heappush(heap, item)
+
+    for child in node.children:
+        if child not in finished and child not in heap:
+            heappush(heap, child)
+        
+    return node, heap, remaining, finished
+
+
+def priority_graph_traversal(graph_heads, graph_dict, num_workers=1):
     heap = []
     steps = []
 
     for head in graph_heads:
-        print(f'Pushing {head}')
         heappush(heap, head)
 
-    closed = graph_dict
+    remaining = graph_dict
     finished = []
 
-    while len(heap) != 0:
+    available_worker_queue = queue.Queue()
 
-        # pop items til we get one that is available
-        is_available = False
-        while not is_available:
-            put_back = []
-            node = heappop(heap)
-            print(f'Popped {node}')
+    for i in range(num_workers):
+        available_worker_queue.put(Worker())
 
-            is_available = True
-            for letter, letter_node in closed.items():
-                print(f'Checking child {letter_node}')
-                if node in letter_node.children and letter_node is not node:
-                    is_available = False
-            
-            if not is_available:
-                print(f'queueing {node.letter} for putback')
-                put_back.append(node)
-            else:
-                del closed[node.letter]
-                finished.append(node)
-                print(f'Closed {node.letter}')
-                for item in put_back:
-                    print(f'Putting back {item}')
-                    if item not in heap:
-                        heappush(heap, item)
+    working_workers = []
+    total_time = 0
 
-        for child in node.children:
-            if child not in finished and child not in heap:
-                heappush(heap, child)
+    while len(remaining) != 0 or len(working_workers) != 0:
 
-        steps.append(node.letter)
+        total_time += 1
 
+        if(not available_worker_queue.empty()):
+            worker = available_worker_queue.get()
+            work_item, heap, remaining, finished = get_next_work_item(heap, remaining, finished)
+            worker.time_left = ord(work_item.letter)-4
+            worker.work_item = work_item
+            working_workers.append(worker)
+
+
+        for worker in working_workers:
+            worker.time_left -= 1
+            if worker.time_left == 0:
+                steps.append(worker.work_item.letter)
+                available_worker_queue.put(worker)
+                working_workers.remove(worker)
+
+    print(total_time)
     return ''.join(steps)
 
 def get_letters_from_line(line):
@@ -95,11 +123,11 @@ def main():
     for letter in first_letters:
         graph_heads.append(graph_dict[letter])
 
-    print(graph_heads)
-    print(graph_dict)
-    answer = priority_graph_traversal(graph_heads, graph_dict)
+    part1_order = priority_graph_traversal(graph_heads, graph_dict, num_workers=1)
+    print(part1_order)
 
-    print(answer)
+    part2_order = priority_graph_traversal(graph_heads, graph_dict, num_workers=5)
+    print(part2_order)
 
 if __name__ == "__main__":
     main()
