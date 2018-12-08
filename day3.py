@@ -1,3 +1,4 @@
+"""Advent of Code 2018: Day 3"""
 import re
 import numpy as np
 

@@ -1,3 +1,4 @@
+"""Advent of Code 2018: Day 1"""
 def apply_change_check_duplicate(frequency, change, frequency_dict):
 
     is_repeat = False

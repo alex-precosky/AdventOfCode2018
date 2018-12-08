@@ -1,3 +1,4 @@
+"""Advent of Code 2018: Day 2"""
 def build_dict(boxID):
     return_dict = {}
 

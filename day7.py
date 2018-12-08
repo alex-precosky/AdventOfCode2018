@@ -1,3 +1,4 @@
+"""Advent of Code 2018: Day 7"""
 import copy
 from heapq import heappush, heappop
 import ipdb
