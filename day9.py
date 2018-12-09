@@ -1,4 +1,5 @@
 """Advent of Code 2018: Day 9"""
+from collections import defaultdict
 import ipdb
 
 class Marble:
@@ -68,7 +69,7 @@ class Circle:
 
 def play_game(num_players, last_marble):
     """Returns winning score"""
-    scores = [0] * num_players
+    scores = defaultdict(int)
 
     root_marble = Marble(0)
     circle = Circle(root_marble)
@@ -82,8 +83,8 @@ def play_game(num_players, last_marble):
         else:
             removed_marble = circle.remove()
 
-            scores[cur_player-1] += i
-            scores[cur_player-1] += removed_marble.number
+            scores[cur_player] += i
+            scores[cur_player] += removed_marble.number
 
         i += 1
         cur_player = (cur_player + 1) % (num_players + 1)
@@ -93,7 +94,7 @@ def play_game(num_players, last_marble):
         if i == last_marble:
             break
 
-    max_score = max(scores)
+    max_score = max(scores.values())
     return max_score
 
 def main():
