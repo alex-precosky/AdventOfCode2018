@@ -1,6 +1,6 @@
 import numpy as np
 import unittest
-from Day3 import rectangle, place_rectangle_on_fabric, count_overlap
+from day3 import rectangle, place_rectangle_on_fabric, count_overlap
 
 class Test(unittest.TestCase):
 

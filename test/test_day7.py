@@ -1,4 +1,4 @@
-from Day7 import Node, priority_graph_traversal
+from day7 import Node, priority_graph_traversal
 import unittest
 
 class Test(unittest.TestCase):

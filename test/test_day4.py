@@ -1,7 +1,7 @@
 from datetime import datetime
 import dateutil.parser
 import unittest
-from Day4 import Event, EventType
+from day4 import Event, EventType
 
 class Test(unittest.TestCase):
 

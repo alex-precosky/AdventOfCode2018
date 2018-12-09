@@ -1,4 +1,4 @@
-from Day6 import Point, Rectangle, find_bounds, find_index_of_closest_target, find_indices_of_infinite_area_targets, find_largest_area, find_safe_area
+from day6 import Point, Rectangle, find_bounds, find_index_of_closest_target, find_indices_of_infinite_area_targets, find_largest_area, find_safe_area
 import unittest
 
 class Test(unittest.TestCase):

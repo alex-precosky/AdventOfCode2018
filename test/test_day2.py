@@ -1,5 +1,5 @@
 import unittest
-from Day2 import build_dict, check_repeat_n, remove_letter_n
+from day2 import build_dict, check_repeat_n, remove_letter_n
 
 class Test(unittest.TestCase):
     def test_build_dict(self):
