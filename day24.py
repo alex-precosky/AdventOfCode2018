@@ -5,6 +5,7 @@ import re
 
 
 class Faction:
+    """Represents either the immune system or the infection"""
 
     def __init__(self, armies):
         self.armies = armies
